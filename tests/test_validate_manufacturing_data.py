@@ -68,6 +68,20 @@ class TestManufacturingDataValidation(unittest.TestCase):
 
         self.assertIn("Unrecognized status value", findings)
 
+    def test_non_finite_numeric_values_are_rejected(self):
+        for value in ("NaN", "inf", "-inf"):
+            with self.subTest(value=value):
+                record = self.valid_record.copy()
+                record["throughput_tpd"] = value
+
+                findings = validate_record(record, 2)
+
+                self.assertIn(
+                    "throughput_tpd must be a finite number",
+                    findings,
+                )
+
 
 if __name__ == "__main__":
     unittest.main()
+
