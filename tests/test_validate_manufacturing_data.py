@@ -82,6 +82,51 @@ class TestManufacturingDataValidation(unittest.TestCase):
                 )
 
 
+class TestJsonValidationReport(unittest.TestCase):
+
+    def test_json_report_exists_and_contains_expected_summary(self):
+        import json
+        from pathlib import Path
+
+        report_path = (
+            Path(__file__).resolve().parent.parent
+            / "results"
+            / "validation_report.json"
+        )
+
+        self.assertTrue(report_path.exists())
+
+        with report_path.open("r", encoding="utf-8") as file:
+            report = json.load(file)
+
+        self.assertIn("generated_at", report)
+        self.assertEqual(report["summary"]["records_processed"], 10)
+        self.assertEqual(report["summary"]["invalid_records"], 0)
+        self.assertEqual(report["summary"]["records_requiring_review"], 4)
+
+    def test_json_report_records_have_required_fields(self):
+        import json
+        from pathlib import Path
+
+        report_path = (
+            Path(__file__).resolve().parent.parent
+            / "results"
+            / "validation_report.json"
+        )
+
+        with report_path.open("r", encoding="utf-8") as file:
+            report = json.load(file)
+
+        self.assertEqual(len(report["records"]), 10)
+
+        for record in report["records"]:
+            self.assertIn("row_number", record)
+            self.assertIn("status", record)
+            self.assertIn("findings", record)
+
+
+
+
 if __name__ == "__main__":
     unittest.main()
 

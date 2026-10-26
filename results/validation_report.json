@@ -1,0 +1,73 @@
+{
+  "generated_at": "2026-10-26T21:51:07.973571+00:00",
+  "data_file": "data\\manufacturing_records.csv",
+  "summary": {
+    "records_processed": 10,
+    "invalid_records": 0,
+    "records_requiring_review": 4
+  },
+  "records": [
+    {
+      "row_number": 2,
+      "status": "PASS",
+      "findings": []
+    },
+    {
+      "row_number": 3,
+      "status": "PASS",
+      "findings": []
+    },
+    {
+      "row_number": 4,
+      "status": "PASS",
+      "findings": []
+    },
+    {
+      "row_number": 5,
+      "status": "REVIEW REQUIRED",
+      "findings": [
+        "REVIEW: Elevated residual oil"
+      ]
+    },
+    {
+      "row_number": 6,
+      "status": "PASS",
+      "findings": []
+    },
+    {
+      "row_number": 7,
+      "status": "REVIEW REQUIRED",
+      "findings": [
+        "REVIEW: Zero throughput"
+      ]
+    },
+    {
+      "row_number": 8,
+      "status": "REVIEW REQUIRED",
+      "findings": [
+        "REVIEW: Elevated residual oil",
+        "REVIEW: Elevated moisture",
+        "REVIEW: Elevated solvent consumption"
+      ]
+    },
+    {
+      "row_number": 9,
+      "status": "PASS",
+      "findings": []
+    },
+    {
+      "row_number": 10,
+      "status": "PASS",
+      "findings": []
+    },
+    {
+      "row_number": 11,
+      "status": "REVIEW REQUIRED",
+      "findings": [
+        "REVIEW: Elevated residual oil",
+        "REVIEW: Elevated moisture",
+        "REVIEW: Elevated solvent consumption"
+      ]
+    }
+  ]
+}

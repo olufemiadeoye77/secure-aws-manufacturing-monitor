@@ -8,12 +8,13 @@ This is not production or industrial control software.
 """
 
 import csv
+import json
 import math
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
-
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = PROJECT_ROOT / "data" / "manufacturing_records.csv"
+REPORT_FILE = PROJECT_ROOT / "results" / "validation_report.json"
 
 REQUIRED_FIELDS = [
     "timestamp",
@@ -99,6 +100,7 @@ def main():
     total_records = 0
     invalid_records = 0
     review_records = 0
+    record_results = []
 
     with DATA_FILE.open("r", newline="", encoding="utf-8-sig") as file:
         reader = csv.DictReader(file)
@@ -133,6 +135,19 @@ def main():
             ]
 
             if errors:
+                record_status = "INVALID"
+            elif reviews:
+                record_status = "REVIEW REQUIRED"
+            else:
+                record_status = "PASS"
+
+            record_results.append({
+                "row_number": line_number,
+                "status": record_status,
+                "findings": findings,
+            })
+
+            if errors:
                 invalid_records += 1
                 print(f"Row {line_number}: INVALID")
                 for finding in errors:
@@ -152,6 +167,24 @@ def main():
         print(f"Records processed: {total_records}")
         print(f"Invalid records: {invalid_records}")
         print(f"Records requiring review: {review_records}")
+
+        report = {
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "data_file": str(DATA_FILE.relative_to(PROJECT_ROOT)),
+            "summary": {
+                "records_processed": total_records,
+                "invalid_records": invalid_records,
+                "records_requiring_review": review_records,
+            },
+            "records": record_results,
+        }
+
+        REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+        with REPORT_FILE.open("w", encoding="utf-8") as file:
+            json.dump(report, file, indent=2)
+
+        print(f"\nJSON report saved to: {REPORT_FILE.relative_to(PROJECT_ROOT)}")
 
 
 if __name__ == "__main__":
