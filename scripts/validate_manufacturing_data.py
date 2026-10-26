@@ -8,9 +8,9 @@ This is not production or industrial control software.
 """
 
 import csv
+import math
 from datetime import datetime
 from pathlib import Path
-
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = PROJECT_ROOT / "data" / "manufacturing_records.csv"
@@ -57,11 +57,18 @@ def validate_record(record, line_number):
     for field, (minimum, maximum) in NUMERIC_RANGES.items():
         try:
             value = float(record[field])
+
+            if not math.isfinite(value):
+                findings.append(f"{field} must be a finite number")
+                continue
+
+            numeric_values[field] = value
+
             if not minimum <= value <= maximum:
                 findings.append(
                     f"{field} must be between {minimum} and {maximum}"
                 )
-            numeric_values[field] = value
+
         except ValueError:
             findings.append(f"{field} must be numeric")
 
