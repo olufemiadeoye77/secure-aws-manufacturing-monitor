@@ -1,0 +1,26 @@
+Manufacturing Data Validation Report
+========================================
+Row 2: PASS
+Row 3: PASS
+Row 4: PASS
+Row 5: REVIEW REQUIRED
+  - REVIEW: Elevated residual oil
+Row 6: PASS
+Row 7: REVIEW REQUIRED
+  - REVIEW: Zero throughput
+Row 8: REVIEW REQUIRED
+  - REVIEW: Elevated residual oil
+  - REVIEW: Elevated moisture
+  - REVIEW: Elevated solvent consumption
+Row 9: PASS
+Row 10: PASS
+Row 11: REVIEW REQUIRED
+  - REVIEW: Elevated residual oil
+  - REVIEW: Elevated moisture
+  - REVIEW: Elevated solvent consumption
+
+Summary
+----------------------------------------
+Records processed: 10
+Invalid records: 0
+Records requiring review: 4
