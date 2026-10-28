@@ -148,3 +148,66 @@ The initial local tests will be developed before cloud deployment. AWS-specific 
 
 
 
+
+## 8. IAM Least-Privilege Design
+
+### Objective
+
+Ensure that each application or human identity receives only the
+permissions required for its assigned task. Permissions must be
+scoped to the necessary AWS resources wherever supported.
+
+### Proposed identities
+
+| Identity | Intended responsibility | Permission boundary |
+|---|---|---|
+| Project developer | Configure and maintain project resources | Use an appropriately restricted development identity; avoid routine root-user access |
+| Monitoring application | Read or write specifically authorized manufacturing data | Access only the required S3 bucket and object paths |
+| Audit reviewer | Inspect authorized audit records and security evidence | Read-only access to designated audit resources |
+
+These are proposed logical roles. They are not yet created AWS identities.
+
+### S3 access requirements
+
+- Keep the manufacturing data bucket private.
+- Enable S3 Block Public Access.
+- Require encrypted transport using HTTPS.
+- Use bucket-level default encryption.
+- Grant application access only to the required bucket and object paths.
+- Separate read and write permissions when the application does not need both.
+- Do not grant application identities permission to change bucket policies,
+  disable security controls, or administer unrelated AWS resources.
+- Do not grant delete permissions unless a documented requirement justifies them.
+
+### Credential management
+
+- Do not store AWS access keys in source code, CSV files, test reports,
+  README files, or Git history.
+- Prefer temporary credentials and approved AWS credential providers.
+- Use IAM roles and temporary credentials for supported AWS workloads.
+- Apply multi-factor authentication to human access where appropriate.
+- Never use the AWS account root user for routine project work.
+
+### Verification plan
+
+| Test ID | Test | Expected result |
+|---|---|---|
+| IAM-001 | Authorized identity reads an approved object | Access succeeds |
+| IAM-002 | Identity attempts to access an unauthorized object | Access is denied |
+| IAM-003 | Application identity attempts to change bucket policy | Access is denied |
+| IAM-004 | Review the application's effective permissions | Only documented permissions are granted |
+| IAM-005 | Inspect repository for exposed AWS credentials | No credentials are exposed |
+
+These tests remain planned until performed against a correctly configured
+AWS environment. A policy review alone does not prove that every access
+path is secure.
+
+### Implementation status
+
+Status: DESIGN DOCUMENTED; AWS IAM CONTROLS NOT YET DEPLOYED OR VERIFIED.
+
+The final permissions must be based on the actual application workflow,
+AWS resource names, and required API actions. Avoid broad wildcard
+permissions when narrower permissions are practical.
+
+
