@@ -1,0 +1,20 @@
+[
+  {
+    "event_time_utc": "2026-11-07T02:24:23Z",
+    "event_name": "PutObject",
+    "region": "eu-north-1",
+    "resource": "reports/validation_report.json",
+    "identity_type": "AssumedRole",
+    "role_name": "ManufacturingMonitorLambdaRole",
+    "result": "No error code or error message recorded"
+  },
+  {
+    "event_time_utc": "2026-11-07T02:24:23Z",
+    "event_name": "GetObject",
+    "region": "eu-north-1",
+    "resource": "manufacturing_records.csv",
+    "identity_type": "AssumedRole",
+    "role_name": "ManufacturingMonitorLambdaRole",
+    "result": "No error code or error message recorded"
+  }
+]

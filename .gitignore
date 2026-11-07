@@ -28,3 +28,6 @@ outputs/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Private raw CloudTrail audit evidence
+evidence/cloudtrail/
