@@ -1,194 +1,560 @@
-# \# Secure AWS Manufacturing Monitoring System
+\# Secure AWS Manufacturing Monitoring System
 
-# 
 
-# \## Project Overview
 
-# 
+\## Project Overview
 
-# The Secure AWS Manufacturing Monitoring System is a learning and portfolio project that explores how cloud infrastructure, identity and access management, monitoring, and Python automation can support secure manufacturing operations.
 
-# 
 
-# The project uses synthetic industrial production data inspired by manufacturing performance indicators. No real company records, credentials, or confidential production information are required.
+The \*\*Secure AWS Manufacturing Monitoring System\*\* is a practical cloud architecture and security portfolio project demonstrating how AWS services and Python automation can support the monitoring and validation of manufacturing production data.
 
-# 
 
-# \## Objectives
 
-# 
+The project uses synthetic manufacturing records inspired by industrial solvent extraction operations. It demonstrates a workflow in which production data is stored in Amazon S3, processed by AWS Lambda, and converted into a structured validation report.
 
-# \- Design a secure, cloud-based manufacturing monitoring architecture.
 
-# \- Explore AWS Identity and Access Management (IAM) and least-privilege access.
 
-# \- Store synthetic production data using Amazon S3.
+It also explores cloud security through IAM permissions, CloudWatch execution logs, AWS CloudTrail auditing, security documentation, and evidence-based assessment.
 
-# \- Investigate operational monitoring and alerting with Amazon CloudWatch.
 
-# \- Use Python to validate manufacturing data and automate basic checks.
 
-# \- Document security risks, tests, architecture decisions, and lessons learned.
+This is an educational project. It does not connect to live industrial machinery, production control systems, or operational technology (OT) environments.
 
-# \- Demonstrate cloud security and architecture skills through a public GitHub portfolio.
 
-# 
 
-# \## Planned AWS Services
+\## Project Objectives
 
-# 
 
-# \- \*\*Amazon S3:\*\* Object storage for synthetic production data.
 
-# \- \*\*AWS IAM:\*\* Identity, roles, policies, and access control.
+\- Build a practical AWS-based manufacturing monitoring workflow.
 
-# \- \*\*Amazon CloudWatch:\*\* Logs, metrics, and monitoring.
+\- Apply AWS Identity and Access Management (IAM) concepts.
 
-# \- \*\*AWS CloudTrail:\*\* Investigation of supported AWS account activity.
+\- Store manufacturing input data and processing reports in Amazon S3.
 
-# \- \*\*AWS Budgets:\*\* Cost awareness and budget notifications, subject to account eligibility and configuration.
+\- Use AWS Lambda for automated data processing.
 
-# 
+\- Monitor execution through Amazon CloudWatch.
 
-# Services will be introduced progressively. Some components may initially be demonstrated locally or through architecture documentation before any cloud deployment.
+\- Audit relevant AWS activity using AWS CloudTrail.
 
-# 
+\- Develop Python scripts for data validation and evidence sanitisation.
 
-# \## Example Manufacturing Indicators
+\- Document security findings, architecture decisions, and outstanding risks.
 
-# 
+\- Demonstrate practical cloud architecture and security skills through a public GitHub portfolio.
 
-# The synthetic dataset may include:
 
-# 
 
-# \- Production throughput (tonnes per day)
+\## Architecture and AWS Services
 
-# \- Residual oil percentage
 
-# \- Moisture percentage
 
-# \- Solvent consumption per tonne
+The project uses the following AWS services:
 
-# \- Production exceptions and timestamps
 
-# 
 
-# These indicators are illustrative and are not live industrial control data.
+| Service | Project role |
 
-# 
+|---|---|
 
-# \## Security Principles
+| Amazon S3 | Stores synthetic manufacturing input data and validation reports. |
 
-# 
+| AWS Lambda | Executes the manufacturing data processing workflow. |
 
-# \- Least-privilege access
+| AWS IAM | Provides the Lambda execution identity and associated permissions. |
 
-# \- No hard-coded credentials or committed secrets
+| Amazon CloudWatch | Captures Lambda execution logs and operational information. |
 
-# \- Restricted access to stored data
+| AWS CloudTrail | Records relevant AWS management activity and S3 object-level events. |
 
-# \- Encryption and secure configuration where applicable
+| AWS Budgets | Supports cost awareness and budget monitoring. |
 
-# \- Logging and monitoring of relevant events
 
-# \- Input validation and automated testing
 
-# \- Cost awareness and resource cleanup
+\### Processing workflow
 
-# 
 
-# \## Project Structure
 
-# 
+1\. Synthetic manufacturing records are uploaded to an Amazon S3 input location.
 
-# ```text
+2\. AWS Lambda retrieves the input data using its execution role.
 
-# secure-aws-manufacturing-monitor/
+3\. The processing logic evaluates manufacturing indicators against configured validation thresholds.
 
-# ├── architecture/
+4\. The system generates a JSON validation report.
 
-# │   └── architecture.md
+5\. The report is written to the designated S3 reports location.
 
-# ├── data/
+6\. Amazon CloudWatch captures execution information.
 
-# │   └── README.md
+7\. AWS CloudTrail provides an audit trail for relevant account and S3 activity.
 
-# ├── docs/
 
-# │   └── security-plan.md
 
-# ├── scripts/
+The deployed AWS environment is in the `eu-north-1` region.
 
-# │   └── README.md
 
-# ├── tests/
 
-# │   └── README.md
+\## Manufacturing Data and Validation
 
-# ├── .gitignore
 
-# └── README.md
 
-# ```
+The synthetic dataset includes the following indicators:
 
-# 
 
-# \## Current Status
 
-# 
+\- Timestamp
 
-# \*\*Phase 1 — Repository and documentation setup\*\*
+\- Production throughput (tonnes per day)
 
-# 
+\- Residual oil percentage
 
-# \- \[x] Create the GitHub repository.
+\- Moisture percentage
 
-# \- \[x] Initialize the local Git repository.
+\- Solvent consumption per tonne
 
-# \- \[x] Create the initial README.
+\- Production status
 
-# \- \[x] Create the project folder structure.
 
-# \- \[ ] Document the architecture and threat model.
 
-# \- \[ ] Generate synthetic manufacturing data.
+The validation logic checks for conditions such as:
 
-# \- \[ ] Develop and test Python validation scripts.
 
-# \- \[ ] Implement selected AWS security controls.
 
-# \- \[ ] Capture test evidence and document results.
+\- Residual oil above the configured threshold.
 
-# 
+\- Zero production throughput.
 
-# \## Safety and Cost Notice
+\- Moisture above the configured threshold.
 
-# 
+\- Solvent consumption above the configured threshold.
 
-# This project is educational and is not production-ready industrial control software. It will use synthetic data and will not connect to live machinery or operational technology.
+\- Invalid or out-of-range input values.
 
-# 
 
-# AWS resources can incur charges. Cloud deployments will be introduced cautiously, with cost checks and cleanup steps. Budget notifications are not guaranteed to prevent charges.
 
-# 
+\### Recorded validation result
 
-# \## Skills Demonstrated
 
-# 
 
-# Cloud architecture, AWS security fundamentals, IAM, monitoring, Python automation, manufacturing analytics, documentation, Git, and GitHub-based portfolio development.
+A representative processing run produced the following result:
 
-# 
 
-# \## Author
 
-# 
+| Metric | Result |
 
-# Developed as a practical cloud architecture and security learning project.
+|---|---:|
 
+| Records processed | 10 |
 
+| Invalid records | 0 |
 
+| Records flagged for review | 4 |
 
+| Records without exceptions | 6 |
+
+
+
+The review flags identify records requiring further operational attention. They should not automatically be interpreted as confirmed equipment failures or process incidents.
+
+
+
+\## Cloud Security and Audit Evidence
+
+
+
+Security is an important part of this project. The work includes both implementation and evidence-based assessment.
+
+
+
+\### IAM
+
+
+
+A dedicated Lambda execution role, `ManufacturingMonitorLambdaRole`, is used by the monitoring application.
+
+
+
+The documented permission design separates application execution from administrative and audit responsibilities. The application role is intended to have only the access needed to retrieve manufacturing input and write validation reports.
+
+
+
+The actual effectiveness of all IAM restrictions remains subject to further policy and trust-policy verification.
+
+
+
+\### Amazon S3
+
+
+
+S3 provides storage for manufacturing input data and generated reports.
+
+
+
+The security assessment identifies the configuration areas requiring verification, including:
+
+
+
+\- Block Public Access.
+
+\- Bucket policy restrictions.
+
+\- Encryption configuration.
+
+\- Versioning.
+
+\- Transport security.
+
+
+
+\### Amazon CloudWatch
+
+
+
+CloudWatch execution logs provide evidence of Lambda processing activity, including record counts, execution duration, and memory usage.
+
+
+
+\### AWS CloudTrail
+
+
+
+CloudTrail is used to investigate AWS activity, including S3 object-level operations.
+
+
+
+The repository includes a sanitised public evidence summary showing two reviewed events:
+
+
+
+\- `GetObject` for the manufacturing input.
+
+\- `PutObject` for the generated validation report.
+
+
+
+Both events were attributed to the Lambda execution role in the reviewed evidence.
+
+
+
+The public summary excludes account identifiers, full resource ARNs, request IDs, source IP addresses, and raw log contents.
+
+
+
+\*\*Important:\*\* The published events are evidence from the reviewed log files. They do not establish that every possible access event has been reviewed or that no other events occurred.
+
+
+
+\### Security assessment
+
+
+
+The assessment is documented in:
+
+
+
+`docs/cloud-security-assessment.md`
+
+
+
+It records observed evidence, limitations, outstanding verification work, and recommended security improvements.
+
+
+
+The project is not presented as a completed security audit, penetration test, compliance certification, or production-ready deployment.
+
+
+
+\## Repository Structure
+
+
+
+```text
+
+secure-aws-manufacturing-monitor/
+
+│
+
+├── architecture/
+
+│   └── architecture.md
+
+│
+
+├── data/
+
+│   ├── README.md
+
+│   └── manufacturing\_records.csv
+
+│
+
+├── docs/
+
+│   ├── cloud-security-assessment.md
+
+│   └── security-plan.md
+
+│
+
+├── evidence/
+
+│   └── public/
+
+│       └── cloudtrail\_s3\_object\_events.json
+
+│
+
+├── results/
+
+│   ├── validation\_report.json
+
+│   └── validation\_report.txt
+
+│
+
+├── scripts/
+
+│   ├── README.md
+
+│   ├── create\_public\_cloudtrail\_evidence.py
+
+│   └── validate\_manufacturing\_data.py
+
+│
+
+├── tests/
+
+│   ├── README.md
+
+│   └── test\_validate\_manufacturing\_data.py
+
+│
+
+├── .gitignore
+
+└── README.md
+
+```
+
+
+
+Private raw CloudTrail files and the account-specific inspection utility are intentionally excluded from the public repository.
+
+
+
+\## Running the Local Validation
+
+
+
+The project includes a local Python validation script and automated tests.
+
+
+
+\### Requirements
+
+
+
+\- Python 3
+
+\- pytest for running the automated tests
+
+
+
+\### Run the validation script
+
+
+
+From the repository root:
+
+
+
+```bash
+
+python scripts/validate\_manufacturing\_data.py
+
+```
+
+
+
+\### Run the automated tests
+
+
+
+```bash
+
+python -m pytest -v
+
+```
+
+
+
+The local validation script and automated tests demonstrate the data-validation logic. They should be distinguished from the separately deployed AWS Lambda workflow.
+
+
+
+\## Security Principles
+
+
+
+The project follows these security principles:
+
+
+
+\- Least-privilege access.
+
+\- Separation of application and administrative responsibilities.
+
+\- Protection of credentials and sensitive information.
+
+\- Restricted access to stored data.
+
+\- Encryption and secure transport configuration.
+
+\- Logging and auditability.
+
+\- Input validation and automated testing.
+
+\- Sanitisation of evidence before public release.
+
+\- Cost awareness and controlled cloud resource usage.
+
+
+
+\## Current Project Status
+
+
+
+\*\*Implemented and documented\*\*
+
+
+
+\- \[x] GitHub repository and project structure.
+
+\- \[x] Synthetic manufacturing dataset.
+
+\- \[x] Python manufacturing data validation.
+
+\- \[x] Automated validation tests.
+
+\- \[x] AWS S3 input and report storage.
+
+\- \[x] AWS Lambda processing workflow.
+
+\- \[x] Dedicated Lambda execution role.
+
+\- \[x] CloudWatch execution logging.
+
+\- \[x] CloudTrail audit trail and S3 object-level event collection.
+
+\- \[x] Sanitised public CloudTrail evidence.
+
+\- \[x] IAM security design documentation.
+
+\- \[x] Evidence-based cloud security assessment.
+
+
+
+\*\*Further hardening and verification\*\*
+
+
+
+\- \[ ] Verify S3 Block Public Access and bucket policy configuration.
+
+\- \[ ] Verify S3 encryption and versioning settings.
+
+\- \[ ] Review the complete Lambda IAM trust policy and permissions.
+
+\- \[ ] Validate CloudTrail log-file integrity.
+
+\- \[ ] Review and assess the scope of CloudTrail data-event selectors.
+
+\- \[ ] Perform controlled permitted-access and denied-access tests.
+
+\- \[ ] Review monitoring and alerting coverage.
+
+\- \[ ] Update the security assessment with new verification evidence.
+
+
+
+The checklist distinguishes documented implementation from controls that still require independent verification.
+
+
+
+\## Safety and Cost Considerations
+
+
+
+This project is educational and is not production-ready industrial control software.
+
+
+
+It uses synthetic data and does not connect to live machinery, production systems, or operational technology.
+
+
+
+AWS resources may incur charges. Deployment and testing should be carried out with cost monitoring, budget awareness, and appropriate resource cleanup.
+
+
+
+AWS Budgets notifications are monitoring aids and do not guarantee that spending will stop at a specified amount.
+
+
+
+\## Future Development
+
+
+
+Potential next stages include:
+
+
+
+\- Stronger IAM and S3 security verification.
+
+\- CloudTrail integrity validation.
+
+\- Improved security monitoring and alerting.
+
+\- Automated security evidence collection.
+
+\- Cloud security posture assessment.
+
+\- Future exploration of AI-assisted security analysis and anomaly investigation.
+
+
+
+\## Skills Demonstrated
+
+
+
+\- AWS cloud architecture.
+
+\- AWS IAM and access-control design.
+
+\- Amazon S3.
+
+\- AWS Lambda.
+
+\- Amazon CloudWatch.
+
+\- AWS CloudTrail.
+
+\- Python automation.
+
+\- Manufacturing data validation.
+
+\- Cloud security assessment.
+
+\- Audit evidence handling.
+
+\- Git and GitHub project development.
+
+
+
+\## Author
+
+
+
+Developed as a practical cloud architecture, automation, and security learning project focused on manufacturing monitoring use cases.
 

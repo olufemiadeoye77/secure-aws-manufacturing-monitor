@@ -31,3 +31,5 @@ Thumbs.db
 
 # Private raw CloudTrail audit evidence
 evidence/cloudtrail/
+# Local-only account-specific CloudTrail inspection utility
+/scripts/inspect_cloudtrail_evidence.py
