@@ -33,3 +33,4 @@ Thumbs.db
 evidence/cloudtrail/
 # Local-only account-specific CloudTrail inspection utility
 /scripts/inspect_cloudtrail_evidence.py
+recovery-test/

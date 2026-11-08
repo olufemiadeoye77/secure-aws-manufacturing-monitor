@@ -28,7 +28,9 @@ The available evidence demonstrates that:
 
 The evidence provides a useful demonstration of cloud auditability and application-level traceability.
 
-However, this is not a complete AWS security audit. Several important controls still require direct verification, including S3 public-access settings, bucket policy, encryption, versioning, IAM permissions, IAM trust policy, and CloudTrail log-integrity validation.
+However, this is not a complete AWS security audit. Although bucket-level S3 public-access controls, bucket policy status, default encryption, existing object encryption, and versioning have now been inspected, further verification remains necessary.
+
+Outstanding areas include account-level S3 Block Public Access settings, effective IAM permissions, IAM trust policy, full production restoration and disaster-recovery testing, and CloudTrail log-integrity validation.
 
 No AWS resource, IAM permission, bucket policy, CloudTrail selector, or encryption setting was changed as part of this assessment.
 
@@ -164,31 +166,112 @@ Continue using Lambda execution roles rather than embedding long-term AWS creden
 
 ### 3.5 S3 security configuration
 
-**Status: Not verified**
+**Status: Verified by configuration inspection — bucket-level controls**
 
-The following configuration evidence was not available for this review:
+**Inspection date:** 7 November 2026
 
-- S3 Block Public Access settings at bucket level.
-- Account-level S3 Block Public Access settings.
-- Bucket policy and its effective permissions.
-- Default encryption configuration.
-- Encryption configuration of the relevant objects.
-- Bucket versioning status.
+**AWS Region:** `eu-north-1`
+
+**Inspection method:** Read-only AWS CLI configuration queries.
+
+The following read-only AWS CLI commands were executed against the manufacturing-monitoring S3 bucket in `eu-north-1` using the `manufacturing-monitor` profile.
+
+**1. S3 Block Public Access**
+
+Command: `aws s3api get-public-access-block`
+
+All four bucket-level Block Public Access settings returned `true`:
+
+- `BlockPublicAcls`
+- `IgnorePublicAcls`
+- `BlockPublicPolicy`
+- `RestrictPublicBuckets`
+
+**2. Bucket public-access status**
+
+Command: `aws s3api get-bucket-policy-status`
+
+AWS returned:
+
+- `IsPublic: false`
+
+This indicates that AWS does not classify the inspected bucket policy as public.
+
+**3. Bucket policy and transport security**
+
+Command: `aws s3api get-bucket-policy`
+
+The inspected bucket policy contains a `DenyInsecureTransport` statement. It denies `s3:*` requests against the bucket and its objects when `aws:SecureTransport` is `false`.
+
+This provides a bucket-policy control against requests made without secure transport.
+
+**4. Default encryption**
+
+Command: `aws s3api get-bucket-encryption`
+
+The bucket's default server-side encryption algorithm is `AES256` (SSE-S3).
+
+The configuration also reports that SSE-C encryption is blocked.
+
+**5. Bucket versioning**
+
+Command: `aws s3api get-bucket-versioning`
+
+AWS returned:
+
+- `Status: Enabled`
+
+This confirms that bucket versioning is enabled at the time of inspection.
+
+**S3 historical object recovery test**
+
+A controlled historical-version retrieval test was performed using the AWS S3 `get-object` API.
+
+The previous version of `reports/validation_report.json` was retrieved using its specific VersionId:
+
+- VersionId: `g.8RLXzupy9w_AKsUrO6O2rJ9WkLyLuS`
+- Original last-modified time: 7 November 2026, 01:45:24 UTC.
+- Retrieved content length: 1,757 bytes.
+- Server-side encryption: AES256.
+- Retrieval destination: `recovery-test/validation_report_previous.json`.
+
+The retrieved file was successfully parsed using Python's JSON validation utility (`python -m json.tool`).
+
+The recovered report retained its original processing metadata and manufacturing validation results.
+
+**Recovery test result: Successful historical-version retrieval and readability verification.**
+
+This test did not overwrite the production object or demonstrate a full production restoration or disaster-recovery exercise.
 
 **Assessment**
 
-No conclusion can be made about the current state of these controls from the CloudTrail object-event records alone.
+The inspected bucket-level configuration demonstrates that:
+
+- All four S3 Block Public Access controls are enabled.
+- AWS classifies the inspected bucket policy as non-public; unintended cross-account access has not yet been independently assessed.
+- Insecure transport is explicitly denied by the bucket policy.
+- Default server-side encryption uses SSE-S3.
+- SSE-C is blocked.
+- S3 bucket versioning is enabled.
+
+These findings are based on configuration inspection. They do not constitute a penetration test or independently prove that every possible access path is secure.
+
+**Outstanding verification**
+
+The following items remain outside the evidence collected so far:
+
+- Account-level S3 Block Public Access settings.
+- Effective access permissions across all applicable IAM identities and resource policies.
+- Full production restoration and disaster-recovery testing, including validation of recovery procedures and recovery objectives.
 
 **Recommendations**
 
-Obtain and retain read-only evidence of:
+1. Inspect account-level S3 Block Public Access settings.
+2. Retain evidence of AES256 encryption for the existing manufacturing input and validation-report objects.
+3. Review IAM and resource-policy permissions to establish effective access boundaries.
+4. Conduct a controlled full production restoration and disaster-recovery exercise, including recovery procedure and recovery-time validation.
 
-1. Account-level and bucket-level Block Public Access settings.
-2. Bucket policy, including any public or cross-account access.
-3. Default encryption and relevant object encryption settings.
-4. Bucket versioning status.
-
-The intended design should keep manufacturing data private, enforce appropriate encryption, and prevent unauthorised public access.
+The existing bucket-level controls should be retained and periodically reviewed.
 
 ### 3.6 IAM execution-role permissions and trust policy
 
@@ -272,10 +355,10 @@ Continue reviewing all files before publication. Do not commit raw CloudTrail re
 | S3 object activity | Verified | Input read and report write recorded |
 | Lambda identity | Verified for observed events | Assumed execution role identified |
 | CloudWatch execution | Verified | Processing and report generation recorded |
-| S3 public-access block | Not verified | Configuration evidence required |
-| Bucket policy | Not verified | Policy review required |
-| S3 encryption | Not verified | Configuration evidence required |
-| S3 versioning | Not verified | Configuration evidence required |
+| S3 public-access block | Verified by configuration inspection | All four bucket-level controls enabled; account-level settings remain unverified |
+| Bucket policy | Verified by configuration inspection | Non-public status; explicit insecure-transport denial |
+| S3 encryption | Verified by configuration inspection | Default SSE-S3 (AES256); SSE-C blocked; both inspected existing objects report AES256 encryption |
+| S3 versioning | Verified by configuration inspection and historical retrieval test | Versioning enabled; three report versions identified; historical report retrieved and validated; full production restoration outstanding |
 | IAM permissions | Not verified | Policy documents required |
 | IAM trust policy | Not verified | Trust relationship required |
 | CloudTrail integrity | Not verified | Validation output required |
@@ -295,10 +378,10 @@ Any optimisation should preserve the audit requirements and be tested before imp
 
 The following actions are recommended, in priority order:
 
-1. Verify S3 Block Public Access settings at account and bucket levels.
-2. Review the S3 bucket policy for unintended public or cross-account access.
-3. Verify S3 default encryption and object encryption.
-4. Verify S3 bucket versioning.
+1. Verify account-level S3 Block Public Access settings.
+2. Retain evidence of AES256 encryption for the existing manufacturing input and validation-report objects.
+3. Review IAM and resource-policy permissions to establish effective access boundaries.
+4. Conduct a controlled full production restoration and disaster-recovery exercise.
 5. Review the Lambda execution-role permissions and trust policy.
 6. Assess whether the CloudTrail S3 data-event selector can be appropriately scoped.
 7. Run CloudTrail log-file integrity validation and preserve the results.
