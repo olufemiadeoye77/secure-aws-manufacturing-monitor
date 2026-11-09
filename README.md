@@ -1,52 +1,46 @@
-\# Secure AWS Manufacturing Monitoring System
+# Secure AWS Manufacturing Monitoring System
 
 
 
-\## Project Overview
+## Project Overview
+
+The **Secure AWS Manufacturing Monitoring System** is a practical cloud architecture and security portfolio project demonstrating how AWS services and Python can be integrated to build a secure, serverless manufacturing data monitoring and validation solution.
+
+The project demonstrates cloud architecture design, AWS security controls, IAM least-privilege principles, automated data processing, monitoring, and audit evidence collection.
+
+## Project Documentation
+
+- [Implemented AWS Architecture](architecture/architecture.md)
+- [Cloud Security Assessment](docs/cloud-security-assessment.md)
+- [Security Plan](docs/security-plan.md)
+- [Sanitised CloudTrail Evidence](evidence/public/cloudtrail_s3_object_events.json)
+
+
+## Project Objectives
 
 
 
-The \*\*Secure AWS Manufacturing Monitoring System\*\* is a practical cloud architecture and security portfolio project demonstrating how AWS services and Python automation can support the monitoring and validation of manufacturing production data.
+- Build a practical AWS-based manufacturing monitoring workflow.
+
+- Apply AWS Identity and Access Management (IAM) concepts.
+
+- Store manufacturing input data and processing reports in Amazon S3.
+
+- Use AWS Lambda for automated data processing.
+
+- Monitor execution through Amazon CloudWatch.
+
+- Audit relevant AWS activity using AWS CloudTrail.
+
+- Develop Python scripts for data validation and evidence sanitisation.
+
+- Document security findings, architecture decisions, and outstanding risks.
+
+- Demonstrate practical cloud architecture and security skills through a public GitHub portfolio.
 
 
 
-The project uses synthetic manufacturing records inspired by industrial solvent extraction operations. It demonstrates a workflow in which production data is stored in Amazon S3, processed by AWS Lambda, and converted into a structured validation report.
-
-
-
-It also explores cloud security through IAM permissions, CloudWatch execution logs, AWS CloudTrail auditing, security documentation, and evidence-based assessment.
-
-
-
-This is an educational project. It does not connect to live industrial machinery, production control systems, or operational technology (OT) environments.
-
-
-
-\## Project Objectives
-
-
-
-\- Build a practical AWS-based manufacturing monitoring workflow.
-
-\- Apply AWS Identity and Access Management (IAM) concepts.
-
-\- Store manufacturing input data and processing reports in Amazon S3.
-
-\- Use AWS Lambda for automated data processing.
-
-\- Monitor execution through Amazon CloudWatch.
-
-\- Audit relevant AWS activity using AWS CloudTrail.
-
-\- Develop Python scripts for data validation and evidence sanitisation.
-
-\- Document security findings, architecture decisions, and outstanding risks.
-
-\- Demonstrate practical cloud architecture and security skills through a public GitHub portfolio.
-
-
-
-\## Architecture and AWS Services
+## Architecture and AWS Services
 
 
 
@@ -72,23 +66,23 @@ The project uses the following AWS services:
 
 
 
-\### Processing workflow
+### Processing workflow
 
 
 
-1\. Synthetic manufacturing records are uploaded to an Amazon S3 input location.
+1. Synthetic manufacturing records are uploaded to an Amazon S3 input location.
 
-2\. AWS Lambda retrieves the input data using its execution role.
+2. AWS Lambda retrieves the input data using its execution role.
 
-3\. The processing logic evaluates manufacturing indicators against configured validation thresholds.
+3. The processing logic evaluates manufacturing indicators against configured validation thresholds.
 
-4\. The system generates a JSON validation report.
+4. The system generates a JSON validation report.
 
-5\. The report is written to the designated S3 reports location.
+5. The report is written to the designated S3 reports location.
 
-6\. Amazon CloudWatch captures execution information.
+6. Amazon CloudWatch captures execution information.
 
-7\. AWS CloudTrail provides an audit trail for relevant account and S3 activity.
+7. AWS CloudTrail provides an audit trail for relevant account and S3 activity.
 
 
 
@@ -96,7 +90,7 @@ The deployed AWS environment is in the `eu-north-1` region.
 
 
 
-\## Manufacturing Data and Validation
+## Manufacturing Data and Validation
 
 
 
@@ -104,17 +98,17 @@ The synthetic dataset includes the following indicators:
 
 
 
-\- Timestamp
+- Timestamp
 
-\- Production throughput (tonnes per day)
+- Production throughput (tonnes per day)
 
-\- Residual oil percentage
+- Residual oil percentage
 
-\- Moisture percentage
+- Moisture percentage
 
-\- Solvent consumption per tonne
+- Solvent consumption per tonne
 
-\- Production status
+- Production status
 
 
 
@@ -122,19 +116,19 @@ The validation logic checks for conditions such as:
 
 
 
-\- Residual oil above the configured threshold.
+- Residual oil above the configured threshold.
 
-\- Zero production throughput.
+- Zero production throughput.
 
-\- Moisture above the configured threshold.
+- Moisture above the configured threshold.
 
-\- Solvent consumption above the configured threshold.
+- Solvent consumption above the configured threshold.
 
-\- Invalid or out-of-range input values.
+- Invalid or out-of-range input values.
 
 
 
-\### Recorded validation result
+### Recorded validation result
 
 
 
@@ -160,7 +154,7 @@ The review flags identify records requiring further operational attention. They 
 
 
 
-\## Cloud Security and Audit Evidence
+## Cloud Security and Audit Evidence
 
 
 
@@ -168,7 +162,7 @@ Security is an important part of this project. The work includes both implementa
 
 
 
-\### IAM
+### IAM
 
 
 
@@ -184,7 +178,7 @@ The actual effectiveness of all IAM restrictions remains subject to further poli
 
 
 
-\### Amazon S3
+### Amazon S3
 
 
 
@@ -196,19 +190,19 @@ The security assessment identifies the configuration areas requiring verificatio
 
 
 
-\- Block Public Access.
+- Block Public Access.
 
-\- Bucket policy restrictions.
+- Bucket policy restrictions.
 
-\- Encryption configuration.
+- Encryption configuration.
 
-\- Versioning.
+- Versioning.
 
-\- Transport security.
+- Transport security.
 
 
 
-\### Amazon CloudWatch
+### Amazon CloudWatch
 
 
 
@@ -216,7 +210,7 @@ CloudWatch execution logs provide evidence of Lambda processing activity, includ
 
 
 
-\### AWS CloudTrail
+### AWS CloudTrail
 
 
 
@@ -228,9 +222,9 @@ The repository includes a sanitised public evidence summary showing two reviewed
 
 
 
-\- `GetObject` for the manufacturing input.
+- `GetObject` for the manufacturing input.
 
-\- `PutObject` for the generated validation report.
+- `PutObject` for the generated validation report.
 
 
 
@@ -242,11 +236,11 @@ The public summary excludes account identifiers, full resource ARNs, request IDs
 
 
 
-\*\*Important:\*\* The published events are evidence from the reviewed log files. They do not establish that every possible access event has been reviewed or that no other events occurred.
+**Important:** The published events are evidence from the reviewed log files. They do not establish that every possible access event has been reviewed or that no other events occurred.
 
 
 
-\### Security assessment
+### Security assessment
 
 
 
@@ -266,7 +260,7 @@ The project is not presented as a completed security audit, penetration test, co
 
 
 
-\## Repository Structure
+## Repository Structure
 
 
 
@@ -286,7 +280,7 @@ secure-aws-manufacturing-monitor/
 
 │   ├── README.md
 
-│   └── manufacturing\_records.csv
+│   └── manufacturing_records.csv
 
 │
 
@@ -302,15 +296,15 @@ secure-aws-manufacturing-monitor/
 
 │   └── public/
 
-│       └── cloudtrail\_s3\_object\_events.json
+│       └── cloudtrail_s3_object_events.json
 
 │
 
 ├── results/
 
-│   ├── validation\_report.json
+│   ├── validation_report.json
 
-│   └── validation\_report.txt
+│   └── validation_report.txt
 
 │
 
@@ -318,9 +312,9 @@ secure-aws-manufacturing-monitor/
 
 │   ├── README.md
 
-│   ├── create\_public\_cloudtrail\_evidence.py
+│   ├── create_public_cloudtrail_evidence.py
 
-│   └── validate\_manufacturing\_data.py
+│   └── validate_manufacturing_data.py
 
 │
 
@@ -328,7 +322,7 @@ secure-aws-manufacturing-monitor/
 
 │   ├── README.md
 
-│   └── test\_validate\_manufacturing\_data.py
+│   └── test_validate_manufacturing_data.py
 
 │
 
@@ -344,7 +338,7 @@ Private raw CloudTrail files and the account-specific inspection utility are int
 
 
 
-\## Running the Local Validation
+## Running the Local Validation
 
 
 
@@ -352,17 +346,17 @@ The project includes a local Python validation script and automated tests.
 
 
 
-\### Requirements
+### Requirements
 
 
 
-\- Python 3
+- Python 3
 
-\- pytest for running the automated tests
+- pytest for running the automated tests
 
 
 
-\### Run the validation script
+### Run the validation script
 
 
 
@@ -372,13 +366,13 @@ From the repository root:
 
 ```bash
 
-python scripts/validate\_manufacturing\_data.py
+python scripts/validate_manufacturing_data.py
 
 ```
 
 
 
-\### Run the automated tests
+### Run the automated tests
 
 
 
@@ -394,7 +388,7 @@ The local validation script and automated tests demonstrate the data-validation 
 
 
 
-\## Security Principles
+## Security Principles
 
 
 
@@ -402,87 +396,71 @@ The project follows these security principles:
 
 
 
-\- Least-privilege access.
+- Least-privilege access.
 
-\- Separation of application and administrative responsibilities.
+- Separation of application and administrative responsibilities.
 
-\- Protection of credentials and sensitive information.
+- Protection of credentials and sensitive information.
 
-\- Restricted access to stored data.
+- Restricted access to stored data.
 
-\- Encryption and secure transport configuration.
+- Encryption and secure transport configuration.
 
-\- Logging and auditability.
+- Logging and auditability.
 
-\- Input validation and automated testing.
+- Input validation and automated testing.
 
-\- Sanitisation of evidence before public release.
+- Sanitisation of evidence before public release.
 
-\- Cost awareness and controlled cloud resource usage.
-
-
-
-\## Current Project Status
+- Cost awareness and controlled cloud resource usage.
 
 
 
-\*\*Implemented and documented\*\*
 
 
 
-\- \[x] GitHub repository and project structure.
+## Current Project Status
 
-\- \[x] Synthetic manufacturing dataset.
+**Implemented and documented**
 
-\- \[x] Python manufacturing data validation.
+- [x] GitHub repository and project structure.
+- [x] Synthetic manufacturing dataset.
+- [x] Python manufacturing data validation.
+- [x] Automated validation tests.
+- [x] AWS S3 input and report storage.
+- [x] AWS Lambda processing workflow.
+- [x] Dedicated Lambda execution role.
+- [x] CloudWatch execution logging.
+- [x] CloudTrail audit trail and S3 object-level event collection.
+- [x] Sanitised public CloudTrail evidence.
+- [x] IAM security design documentation.
+- [x] Evidence-based cloud security assessment.
+- [x] Bucket-level S3 Block Public Access inspection.
+- [x] S3 bucket policy and transport security inspection.
+- [x] S3 default encryption inspection.
+- [x] S3 versioning verification.
+- [x] Historical S3 object version retrieval and JSON validation.
 
-\- \[x] Automated validation tests.
+**Outstanding security verification**
 
-\- \[x] AWS S3 input and report storage.
+- [ ] Verify account-level S3 Block Public Access settings.
+- [ ] Review complete IAM execution-role permissions and trust policy.
+- [ ] Perform controlled authorised-access and denied-access tests.
+- [ ] Validate CloudTrail log-file integrity.
+- [ ] Review CloudTrail S3 data-event selector scope and cost.
+- [ ] Review DeleteObject activity over a defined audit period.
+- [ ] Design and test a restoration and disaster-recovery exercise for the project environment.
+- [ ] Review security monitoring and alerting coverage.
 
-\- \[x] AWS Lambda processing workflow.
-
-\- \[x] Dedicated Lambda execution role.
-
-\- \[x] CloudWatch execution logging.
-
-\- \[x] CloudTrail audit trail and S3 object-level event collection.
-
-\- \[x] Sanitised public CloudTrail evidence.
-
-\- \[x] IAM security design documentation.
-
-\- \[x] Evidence-based cloud security assessment.
-
-
-
-\*\*Further hardening and verification\*\*
-
-
-
-\- \[ ] Verify S3 Block Public Access and bucket policy configuration.
-
-\- \[ ] Verify S3 encryption and versioning settings.
-
-\- \[ ] Review the complete Lambda IAM trust policy and permissions.
-
-\- \[ ] Validate CloudTrail log-file integrity.
-
-\- \[ ] Review and assess the scope of CloudTrail data-event selectors.
-
-\- \[ ] Perform controlled permitted-access and denied-access tests.
-
-\- \[ ] Review monitoring and alerting coverage.
-
-\- \[ ] Update the security assessment with new verification evidence.
+The checklist distinguishes implemented functionality and inspected
+configuration from controls that still require additional verification.
 
 
 
-The checklist distinguishes documented implementation from controls that still require independent verification.
 
 
 
-\## Safety and Cost Considerations
+## Safety and Cost Considerations
 
 
 
@@ -502,7 +480,7 @@ AWS Budgets notifications are monitoring aids and do not guarantee that spending
 
 
 
-\## Future Development
+## Future Development
 
 
 
@@ -510,49 +488,49 @@ Potential next stages include:
 
 
 
-\- Stronger IAM and S3 security verification.
+- Stronger IAM and S3 security verification.
 
-\- CloudTrail integrity validation.
+- CloudTrail integrity validation.
 
-\- Improved security monitoring and alerting.
+- Improved security monitoring and alerting.
 
-\- Automated security evidence collection.
+- Automated security evidence collection.
 
-\- Cloud security posture assessment.
+- Cloud security posture assessment.
 
-\- Future exploration of AI-assisted security analysis and anomaly investigation.
-
-
-
-\## Skills Demonstrated
+- Future exploration of AI-assisted security analysis and anomaly investigation.
 
 
 
-\- AWS cloud architecture.
-
-\- AWS IAM and access-control design.
-
-\- Amazon S3.
-
-\- AWS Lambda.
-
-\- Amazon CloudWatch.
-
-\- AWS CloudTrail.
-
-\- Python automation.
-
-\- Manufacturing data validation.
-
-\- Cloud security assessment.
-
-\- Audit evidence handling.
-
-\- Git and GitHub project development.
+## Skills Demonstrated
 
 
 
-\## Author
+- AWS cloud architecture.
+
+- AWS IAM and access-control design.
+
+- Amazon S3.
+
+- AWS Lambda.
+
+- Amazon CloudWatch.
+
+- AWS CloudTrail.
+
+- Python automation.
+
+- Manufacturing data validation.
+
+- Cloud security assessment.
+
+- Audit evidence handling.
+
+- Git and GitHub project development.
+
+
+
+## Author
 
 
 

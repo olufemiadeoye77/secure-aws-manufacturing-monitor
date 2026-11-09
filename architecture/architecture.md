@@ -1,135 +1,167 @@
-\# Secure AWS Manufacturing Monitoring Architecture
+# Secure AWS Manufacturing Monitoring Architecture
 
+## 1. Purpose
 
+This document describes the implemented architecture of an educational
+AWS-based manufacturing monitoring and cloud security project.
 
-\## 1. Purpose
+The system uses synthetic manufacturing records to demonstrate data
+validation, automated processing, cloud storage, audit logging, and
+security assessment.
 
+It does not connect to live industrial machinery, plant control networks,
+or production systems.
 
+## 2. Implemented Architecture
 
-This document describes the proposed architecture for a learning project that stores synthetic manufacturing data and explores cloud security and monitoring controls.
+The deployed workflow uses the following components:
 
+1. Synthetic manufacturing records are stored in Amazon S3.
+2. AWS Lambda retrieves the input data using its execution role.
+3. Python processing logic validates manufacturing indicators against
+   configured thresholds.
+4. Lambda generates a structured JSON validation report.
+5. The report is stored in the designated S3 reports location.
+6. Amazon CloudWatch captures Lambda execution logs.
+7. AWS CloudTrail records relevant management and S3 object-level events.
+8. Sanitised audit evidence and security findings are documented in GitHub.
 
+The AWS deployment is located in the eu-north-1 region.
 
-\## 2. Proposed Data Flow
+## 3. AWS Components and Responsibilities
 
-
-
-1\. Synthetic manufacturing records are generated locally.
-
-2\. A Python validation script checks required fields and acceptable data types.
-
-3\. Valid records can be uploaded to a private Amazon S3 bucket during the AWS implementation phase.
-
-4\. AWS IAM policies restrict which identities can access the bucket and related services.
-
-5\. AWS CloudTrail records supported account activity for investigation.
-
-6\. Amazon CloudWatch supports relevant logs, metrics, and alerts where configured.
-
-7\. Test results and architecture decisions are documented in GitHub without secrets or sensitive information.
-
-
-
-\## 3. Core Components
-
-
-
-| Component | Purpose |
-
+| Component | Implemented responsibility |
 |---|---|
+| Amazon S3 | Stores synthetic input records and validation reports |
+| AWS Lambda | Executes the manufacturing data-processing workflow |
+| AWS IAM | Provides the Lambda execution identity and associated permissions |
+| Amazon CloudWatch | Captures Lambda execution logs |
+| AWS CloudTrail | Records management and selected S3 object-level activity |
+| AWS Budgets | Supports cloud spending awareness and monitoring |
+| Python | Performs data validation and evidence processing |
+| GitHub | Stores source code, documentation, and sanitised evidence |
 
-| Python scripts | Generate and validate synthetic production records |
+## 4. Processing Workflow
 
-| Amazon S3 | Store data objects |
+1. Manufacturing input records are uploaded to Amazon S3.
+2. Lambda retrieves the input object.
+3. Python validation logic checks required fields and configured thresholds.
+4. The system identifies records requiring further review.
+5. A JSON validation report is generated.
+6. Lambda writes the report to the S3 reports location.
+7. CloudWatch records execution information.
+8. CloudTrail provides evidence of relevant AWS API activity.
 
-| AWS IAM | Apply identity and access controls |
+A representative execution processed 10 records, identified
+zero invalid records, and flagged four records for review.
 
-| AWS CloudTrail | Record supported AWS API activity |
+## 5. IAM Roles and Access Boundaries
 
-| Amazon CloudWatch | Support monitoring and alerting |
+The application uses a dedicated Lambda execution role:
 
-| AWS Budgets | Help track planned cloud spending |
+`ManufacturingMonitorLambdaRole`
 
+The documented IAM design separates application execution,
+administrative responsibilities, and audit review.
 
+The Lambda role has documented S3 and CloudWatch logging permissions.
 
-\## 4. Security Requirements
+However, the complete effective IAM permissions, trust policy,
+and all applicable policy boundaries have not yet been independently
+verified.
 
+The architecture therefore distinguishes the implemented execution
+identity from the broader proposed separation-of-duties model.
 
+## 6. Data Protection and Storage Security
 
-\- Keep storage private by default.
+The manufacturing S3 bucket was inspected on 7 November 2026.
 
-\- Apply least-privilege IAM permissions.
+The reviewed evidence established:
 
-\- Avoid hard-coded credentials.
+- All four bucket-level S3 Block Public Access settings enabled.
+- AWS classified the inspected bucket policy as non-public.
+- The bucket policy explicitly denies insecure transport.
+- Default server-side encryption uses SSE-S3 (AES256).
+- SSE-C encryption is blocked.
+- S3 bucket versioning is enabled.
 
-\- Use encryption and secure transport where applicable.
+A historical version of the validation report was successfully retrieved
+and parsed as valid JSON.
 
-\- Validate data before processing.
+These findings apply to the inspected bucket configuration.
+Account-level public-access settings and complete effective access
+permissions remain subject to further verification.
 
-\- Record relevant security test evidence.
+## 7. Audit and Monitoring
 
-\- Review resource permissions and remove unused resources.
+AWS CloudTrail is configured to record management events and selected
+S3 object-level data events.
 
-\- Check costs before enabling billable services.
+Reviewed audit records include:
 
+- GetObject for the manufacturing input file.
+- PutObject for the generated validation report.
 
+Both reviewed operations were attributed to the Lambda execution role.
 
-\## 5. Scope Boundaries
+Amazon CloudWatch provides execution logs supporting the processing
+workflow.
 
+CloudTrail log-file integrity validation has not yet been completed.
+Alerting coverage also requires further review.
 
+## 8. Security Evidence and Publication
 
-The project uses invented manufacturing records only. It does not connect to live industrial machinery, plant control networks, or production systems. It is a learning prototype, not a production security solution.
+The project maintains a distinction between private AWS audit records
+and sanitised public evidence.
 
+The public repository includes a reduced CloudTrail evidence summary.
 
+Raw CloudTrail records, account-specific inspection utilities,
+credentials, and sensitive AWS identifiers are excluded from
+public publication.
 
-\## 6. Implementation Status
+The security assessment documents observed configurations,
+verified findings, limitations, and recommended improvements.
 
+## 9. Outstanding Verification
 
+The following activities remain outstanding:
 
-This is the initial proposed architecture. AWS services will be configured and tested incrementally. The document must be updated to distinguish planned controls from controls that have actually been implemented and verified.
+- Verify account-level S3 Block Public Access settings.
+- Review the complete IAM execution-role trust policy.
+- Establish effective IAM permissions and applicable policy boundaries.
+- Perform controlled authorised-access and denied-access tests.
+- Validate CloudTrail log-file integrity.
+- Review the scope and cost implications of S3 data-event selectors.
+- Review DeleteObject activity over a defined audit period.
+- Design and test a restoration and disaster-recovery exercise for the project environment.
+- Review security monitoring and alerting coverage.
 
+These outstanding activities do not invalidate the demonstrated
+application workflow or the security evidence already collected.
 
+## 10. Scope and Limitations
 
+This is an educational cloud architecture and security portfolio project.
 
-## 7. IAM Roles and Access Boundaries
+It uses synthetic manufacturing records and is not production-ready
+industrial control software.
 
-### Proposed access model
+The assessment is evidence-based and does not constitute a penetration
+test, independent third-party audit, or formal compliance certification.
 
-The system will use separate identities and permissions for administration,
-application access, and audit review. These are logical design roles; they
-have not yet been created in AWS.
+Controls are described according to their implementation and
+verification status rather than assumed effectiveness.
 
-| Identity | Intended access | Restrictions |
-|---|---|---|
-| Project developer | Configure approved project resources | Use restricted administrative permissions; avoid routine root-user access |
-| Monitoring application | Access the specific S3 objects needed for its task | Grant only required read or write actions; no bucket-policy administration |
-| Audit reviewer | Review authorized audit evidence | Read-only access to designated audit resources |
+## 11. Future Development
 
-### Data protection
+Potential improvements include:
 
-- Keep the S3 bucket private and enable S3 Block Public Access.
-- Enable default encryption for stored objects.
-- Require HTTPS for data transfers.
-- Scope application permissions to the intended bucket and object paths.
-- Do not grant delete permissions unless the documented workflow requires them.
-- Keep AWS credentials out of source code, reports, and Git history.
-- Prefer temporary credentials and appropriate AWS credential providers.
-
-### Audit and monitoring
-
-CloudTrail will be considered for recording relevant AWS account and API
-activity. CloudWatch can support logs, metrics, and alerts where configured.
-The project must verify the relevant settings and permissions before claiming
-that audit logging or monitoring is operational.
-
-### Verification and implementation status
-
-Planned checks include confirming that authorized access succeeds,
-unauthorized access is denied, public access is blocked, encryption settings
-are enabled, and relevant audit events can be reviewed.
-
-Status: ARCHITECTURE DOCUMENTED; AWS IAM, S3, AND AUDIT CONTROLS ARE NOT
-YET DEPLOYED OR VERIFIED.
-
-Any AWS deployment will use synthetic data only. Costs and cleanup
-requirements will be reviewed before billable resources are created.
+- Stronger IAM permission verification.
+- Automated security evidence collection.
+- CloudTrail integrity validation.
+- Improved security alerting.
+- More comprehensive recovery testing.
+- Future AI-assisted security analysis and anomaly investigation.
